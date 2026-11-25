@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PipelineX | Deployment Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0b1120;
+            color: #e5e7eb;
+        }
+
+        .sidebar {
+            width: 232px;
+            height: 100vh;
+            position: fixed;
+            background: #111827;
+            border-right: 1px solid #263449;
+            padding: 28px 16px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 48px;
+        }
+
+        .menu div {
+            padding: 15px;
+            margin-bottom: 10px;
+            color: #9caec5;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .menu div:first-child {
+            background: #1e3a5f;
+            color: #38bdf8;
+        }
+
+        .main {
+            margin-left: 232px;
+            padding: 32px 35px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 36px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+        }
+
+        .server-status {
+            background: #12332d;
+            color: #4ade80;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+
+        .server-status.offline {
+            background: #451e26;
+            color: #f87171;
+        }
+
+        h3 {
+            margin-bottom: 18px;
+            font-size: 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .card, .panel {
+            background: #162133;
+            border: 1px solid #263449;
+            border-radius: 13px;
+            padding: 23px;
+        }
+
+        .card p {
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 27px;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stage {
+            background: #162133;
+            border: 1px solid #263449;
+            border-radius: 13px;
+            padding: 23px;
+            min-height: 190px;
+        }
+
+        .stage-number {
+            color: #38bdf8;
+            font-size: 14px;
+            margin-bottom: 17px;
+        }
+
+        .stage h4 {
+            font-size: 17px;
+            margin-bottom: 13px;
+        }
+
+        .stage p {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #29384e;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .panel h2 {
+            font-size: 27px;
+            margin-bottom: 23px;
+        }
+
+        .panel p {
+            color: #94a3b8;
+            line-height: 2;
+            font-size: 14px;
+        }
+
+        .health-up {
+            color: #4ade80 !important;
+        }
+
+        .health-down {
+            color: #f87171 !important;
+        }
+
+        @media (max-width: 1000px) {
+            .cards, .workflow {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .cards, .workflow, .bottom {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">⚡ PipelineX</div>
+
+    <div class="menu">
+        <div>▦ Dashboard</div>
+        <div>⇄ Pipelines</div>
+        <div>◷ Deployments</div>
+        <div>♡ Monitoring</div>
+        <div>⚙ Settings</div>
+    </div>
+</aside>
+
+<main class="main">
+
+    <header class="header">
+        <div>
+            <h1>Deployment Dashboard</h1>
+            <p class="subtitle">Monitor your software delivery pipeline.</p>
+        </div>
+
+        <div class="server-status" id="serverStatus">
+            ● Checking server...
+        </div>
+    </header>
+
+    <section>
+        <h3>Project Overview</h3>
+
+        <div class="cards">
+            <div class="card">
+                <p>Pipeline Status</p>
+                <h2>Not Run</h2>
+            </div>
+
+            <div class="card">
+                <p>Build Status</p>
+                <h2>Pending</h2>
+            </div>
+
+            <div class="card">
+                <p>Test Results</p>
+                <h2>Pending</h2>
+            </div>
+
+            <div class="card">
+                <p>Deployment</p>
+                <h2>Pending</h2>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h3>Pipeline Workflow</h3>
+
+        <div class="workflow">
+
+            <div class="stage">
+                <div class="stage-number">STAGE 01</div>
+                <h4>⌘ Code Integration</h4>
+                <p>Source code is received from the GitHub repository.</p>
+                <span class="tag">Awaiting trigger</span>
+            </div>
+
+            <div class="stage">
+                <div class="stage-number">STAGE 02</div>
+                <h4>⚙ Build</h4>
+                <p>Maven builds the Java application and checks dependencies.</p>
+                <span class="tag">Pending</span>
+            </div>
+
+            <div class="stage">
+                <div class="stage-number">STAGE 03</div>
+                <h4>✓ Automated Testing</h4>
+                <p>JUnit tests check whether the application works correctly.</p>
+                <span class="tag">Pending</span>
+            </div>
+
+            <div class="stage">
+                <div class="stage-number">STAGE 04</div>
+                <h4>☁ Deployment</h4>
+                <p>Docker packages the application for cloud deployment.</p>
+                <span class="tag">Pending</span>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="bottom">
+
+        <div class="panel">
+            <h2>Deployment History</h2>
+            <p>No deployments recorded yet.</p>
+            <p>Deployment records will appear here after integration.</p>
+        </div>
+
+        <div class="panel">
+            <h2>Application Health</h2>
+            <p>Health endpoint: /actuator/health</p>
+            <p id="healthStatus">Monitoring: Checking...</p>
+            <p>Rollback: Not configured yet</p>
+            <p id="lastChecked">Last checked: Waiting...</p>
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+    async function checkServer() {
+        const serverStatus = document.getElementById("serverStatus");
+        const healthStatus = document.getElementById("healthStatus");
+        const lastChecked = document.getElementById("lastChecked");
+
+        try {
+            const response = await fetch("/actuator/health");
+            const data = await response.json();
+
+            if (response.ok && data.status === "UP") {
+                serverStatus.textContent = "● Application Server Online";
+                serverStatus.classList.remove("offline");
+
+                healthStatus.textContent = "Monitoring: Application is healthy";
+                healthStatus.className = "health-up";
+            } else {
+                throw new Error("Server unhealthy");
+            }
+
+        } catch (error) {
+            serverStatus.textContent = "● Application Server Offline";
+            serverStatus.classList.add("offline");
+
+            healthStatus.textContent = "Monitoring: Health check failed";
+            healthStatus.className = "health-down";
+        }
+
+        lastChecked.textContent =
+            "Last checked: " + new Date().toLocaleTimeString();
+    }
+
+    checkServer();
+    setInterval(checkServer, 10000);
+</script>
+
+</body>
+</html>
